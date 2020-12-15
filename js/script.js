@@ -7,6 +7,8 @@ const designsSelect = document.getElementById('design');
 const jsPunsColors = document.querySelectorAll("[data-theme='js puns']");
 const heartJsColors = document.querySelectorAll("[data-theme='heart js']");
 const activityFieldset = document.getElementById('activities');
+const activitiesBox = document.getElementById('activities-box');
+const checkboxes = [...document.querySelectorAll("[type='checkbox']")];
 let totalCostDisplay = document.getElementById('activities-cost');
 let totalCost = 0;
 const paymentsSelect = document.getElementById('payment');
@@ -77,6 +79,18 @@ const cvvIsValidated = () => {
     return isValid;
 }
 
+const addErrorsAndHints = ( element, bool = true ) => {
+    if( bool ) {
+        element.parentElement.classList.add('not-valid');
+        element.parentElement.classList.remove('valid');
+        element.parentElement.lastElementChild.style.display = 'block';
+    } else {
+        element.parentElement.classList.add('valid');
+        element.parentElement.classList.remove('not-valid');
+        element.parentElement.lastElementChild.style.display = 'none';
+    }
+}
+
 const initializePage = () => {
     nameField.focus();
     otherJobRoleField.style.display = 'none';
@@ -131,32 +145,63 @@ paymentsSelect.addEventListener('change', e => {
 form.addEventListener('submit', e => {
     if( !nameIsValidated() ){
         e.preventDefault();
+        addErrorsAndHints(nameField);
+    } else {
+        addErrorsAndHints(nameField, false);
     }
     if( !emailIsValidated() ){
         e.preventDefault();
+        addErrorsAndHints(emailField);
+    } else {
+        addErrorsAndHints(emailField, false);
     }
     if( !activitiesIsValidated() ){
         e.preventDefault();
+        addErrorsAndHints(activitiesBox);
+    } else {
+        addErrorsAndHints(activitiesBox, false);
     }
     if( paymentsSelect[1].selected ) {
         if( expMonthSelect[0].selected ){
             e.preventDefault();
-            console.log(`Please enter a valid expiration month.`);
+            addErrorsAndHints(expMonthSelect);
+        } else {
+            addErrorsAndHints(expMonthSelect, false);
         }
         if( expYearSelect[0].selected ){
             e.preventDefault();
-            console.log(`Please enter a valid expiration year.`);
+            addErrorsAndHints(expYearSelect);
+        } else {
+            addErrorsAndHints(expYearSelect, false);
         }
         if( !cardNumberIsValidated() ){
             e.preventDefault();
+            addErrorsAndHints(cardNumberField);
+        } else {
+            addErrorsAndHints(cardNumberField, false);
         }
         if( !zipCodeIsValidated() ){
             e.preventDefault();
+            addErrorsAndHints(zipField);
+        } else {
+            addErrorsAndHints(zipField, false);
         }
         if( !cvvIsValidated() ){
             e.preventDefault();
+            addErrorsAndHints(cvvField);
+        } else {
+            addErrorsAndHints(cvvField, false);
         }
     }
+});
+
+checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('focus', e => {
+        checkbox.parentElement.classList.add('focus');
+    });
+    checkbox.addEventListener('blur', e => {
+        checkbox.parentElement.classList.remove('focus');
+    });
 });
 
 // Initializing the page
