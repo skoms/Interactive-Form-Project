@@ -11,6 +11,7 @@ const activitiesBox = document.getElementById('activities-box');
 const checkboxes = [...document.querySelectorAll("[type='checkbox']")];
 let totalCostDisplay = document.getElementById('activities-cost');
 let totalCost = 0;
+const creditCardBox = document.querySelector('.credit-card-box');
 const paymentsSelect = document.getElementById('payment');
 const creditCardDiv = document.getElementById('credit-card');
 const paypalDiv = document.getElementById('paypal');
@@ -195,12 +196,46 @@ form.addEventListener('submit', e => {
     }
 });
 
+creditCardBox.addEventListener('keyup', e => {
+    if( !cardNumberIsValidated() && e.target === cardNumberField ){
+        addErrorsAndHints(cardNumberField);
+    } else if ( e.target === cardNumberField ) {
+        addErrorsAndHints(cardNumberField, false);
+    }
+    if( !zipCodeIsValidated() && e.target === zipField ){
+        addErrorsAndHints(zipField);
+    } else if ( e.target === zipField ) {
+        addErrorsAndHints(zipField, false);
+    }
+    if( !cvvIsValidated() && e.target === cvvField ){
+        addErrorsAndHints(cvvField);
+    } else if ( e.target === cvvField ) {
+        addErrorsAndHints(cvvField, false);
+    }
+});
+
 checkboxes.forEach(checkbox => {
     checkbox.addEventListener('focus', e => {
         checkbox.parentElement.classList.add('focus');
     });
     checkbox.addEventListener('blur', e => {
         checkbox.parentElement.classList.remove('focus');
+        
+    });
+    checkbox.addEventListener('change', e => {
+        if( checkbox.checked ){
+            checkboxes.forEach(cb => {
+                if( cb.name !== checkbox.name && cb.dataset.dayAndTime === checkbox.dataset.dayAndTime ){
+                   cb.parentElement.classList.add('disabled');
+                }
+            });
+        } else {
+            checkboxes.forEach(cb => {
+                if( cb.name !== checkbox.name && cb.dataset.dayAndTime === checkbox.dataset.dayAndTime ){
+                   cb.parentElement.classList.remove('disabled');
+                }
+            });
+        }
     });
 });
 
