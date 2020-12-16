@@ -51,8 +51,31 @@ const nameIsValidated = () => {
 }
 
 const emailIsValidated = () => {
-    const isValid = /^[^@]{1,16}@[a-z]+\.[a-z]+$/.test( emailField.value );
-    !isValid && console.log(`Please enter a valid email. e.g. example@email.com`);
+    let isValid = /^$/.test( emailField.value );
+    if( isValid ) {
+        emailField.parentElement.lastElementChild.innerHTML = `
+        Please enter an email adress
+        `;
+        return false;
+    } else {
+        emailField.parentElement.lastElementChild.innerHTML = `
+        Email address must be formatted correctly
+        `;
+    }
+
+    isValid = /^[^@]{1,16}[^@][a-z]+\.[a-z]+$/.test( emailField.value );
+    if( isValid ) {
+        emailField.parentElement.lastElementChild.innerHTML = `
+        You seem to have forgotten '@'
+        `;
+        return false;
+    } else {
+        emailField.parentElement.lastElementChild.innerHTML = `
+        Email address must be formatted correctly
+        `;
+    }
+
+    isValid = /^[^@]{1,16}@[a-z]+\.[a-z]+$/.test( emailField.value );
     return isValid;
 }
 
@@ -63,20 +86,89 @@ const activitiesIsValidated = () => {
 }
 
 const cardNumberIsValidated = () => {
-    const isValid = /^\d{13,16}$/.test( cardNumberField.value );
-    !isValid && console.log(`Please enter a valid Card Number with 13-16 digits.`);
+    let isValid = /^$/.test(cardNumberField.value);
+    if( isValid ) {
+        cardNumberField.parentElement.lastElementChild.innerHTML = `
+        Please enter a card number
+        `;
+        return false;
+    } else {
+        cardNumberField.parentElement.lastElementChild.innerHTML = `
+        Credit card number must be between 13 - 16 digits
+        `;
+    }
+
+    isValid = /\D+/.test(cardNumberField.value);
+    if( isValid ) {
+        cardNumberField.parentElement.lastElementChild.innerHTML = `
+        Card number can only contain numbers
+        `;
+        return false;
+    } else {
+        cardNumberField.parentElement.lastElementChild.innerHTML = `
+        Credit card number must be between 13 - 16 digits
+        `;
+    }
+
+    isValid = /^\d{13,16}$/.test( cardNumberField.value );
     return isValid;
 }
 
 const zipCodeIsValidated = () => {
-    const isValid = /^\d{5}$/.test(zipField.value);
-    !isValid && console.log(`Please enter a valid Zip Code with 5 digits.`);
+    let isValid = /^$/.test(zipField.value);
+    if( isValid ) {
+        zipField.parentElement.lastElementChild.innerHTML = `
+        Please enter a Zip Code
+        `;
+        return false;
+    } else {
+        zipField.parentElement.lastElementChild.innerHTML = `
+        Zip Code must be 5 digits
+        `;
+    }
+
+    isValid = /\D+/.test(zipField.value);
+    if( isValid ) {
+        zipField.parentElement.lastElementChild.innerHTML = `
+        A Zip Code can only contain numbers
+        `;
+        return false;
+    } else {
+        zipField.parentElement.lastElementChild.innerHTML = `
+        Zip Code must be 5 digits
+        `;
+    }
+
+    isValid = /^\d{5}$/.test(zipField.value);
     return isValid;
 }
 
 const cvvIsValidated = () => {
-    const isValid = /^\d{3}$/.test(cvvField.value);
-    !isValid && console.log(`Please enter a valid CVV with 3 digits.`);
+    let isValid = /^$/.test(cvvField.value);
+    if( isValid ) {
+        cvvField.parentElement.lastElementChild.innerHTML = `
+        Please enter CVV
+        `;
+        return false;
+    } else {
+        cvvField.parentElement.lastElementChild.innerHTML = `
+        CVV must be 3 digits
+        `;
+    }
+
+    isValid = /\D+/.test(cvvField.value);
+    if( isValid ) {
+        cvvField.parentElement.lastElementChild.innerHTML = `
+        A CVV can only contain numbers
+        `;
+        return false;
+    } else {
+        cvvField.parentElement.lastElementChild.innerHTML = `
+        CVV must be 3 digits
+        `;
+    }
+
+    isValid = /^\d{3}$/.test(cvvField.value);
     return isValid;
 }
 
