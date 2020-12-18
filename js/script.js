@@ -3,8 +3,9 @@ const nameField = document.getElementById( 'name' );
 const emailField = document.getElementById( 'email' );
 const jobRoles = document.getElementById( 'title' );
 const otherJobRoleField = document.getElementById( 'other-job-role' );
-const colorsSelect = document.getElementById( 'color' );
 const designsSelect = document.getElementById( 'design' );
+const colorsDiv = document.getElementById( 'shirt-colors' );
+const colorsSelect = document.getElementById( 'color' );
 const jsPunsColors = document.querySelectorAll( "[data-theme='js puns']" );
 const heartJsColors = document.querySelectorAll( "[data-theme='heart js']" );
 const activityFieldset = document.getElementById( 'activities' );
@@ -23,6 +24,16 @@ const bitcoinDiv = document.getElementById( 'bitcoin' );
 let totalCostDisplay = document.getElementById( 'activities-cost' );
 let totalCost = 0;
 
+/** Initializes the page on load/reload */
+const initializePage = () => {
+	nameField.focus();
+	otherJobRoleField.style.display = 'none';
+	colorsDiv.style.display = 'none';
+	paymentsSelect[ 1 ].selected = true;
+	creditCardDiv.style.display = 'block';
+	paypalDiv.style.display = 'none';
+	bitcoinDiv.style.display = 'none';
+}
 /**
  * Changes payment method block displayed
  * @param {string} value - the value of the selected option
@@ -211,16 +222,6 @@ const addErrorsAndHints = ( element, bool = true ) => {
 		element.parentElement.lastElementChild.style.display = 'none';
 	}
 }
-/** Initializes the page on load/reload */
-const initializePage = () => {
-	nameField.focus();
-	otherJobRoleField.style.display = 'none';
-	colorsSelect.style.display = 'none';
-	paymentsSelect[ 1 ].selected = true;
-	creditCardDiv.style.display = 'block';
-	paypalDiv.style.display = 'none';
-	bitcoinDiv.style.display = 'none';
-}
 /** Listener that shows the textfield for users to write in 'other' job role */
 jobRoles.addEventListener( 'change', e => {
 	if ( e.target.value === 'other' ) {
@@ -231,7 +232,7 @@ jobRoles.addEventListener( 'change', e => {
 } );
 /** Listener to correctly display colors for each shirt design */
 designsSelect.addEventListener( 'change', e => {
-	colorsSelect.style.display = 'block';
+	colorsDiv.style.display = 'block';
 	if ( e.target.value === 'js puns' ) {
 		jsPunsColors.forEach( color => {
 			color.style.display = 'block';
@@ -247,7 +248,15 @@ designsSelect.addEventListener( 'change', e => {
 			color.style.display = 'none';
 		} );
 	}
+	/** Makes a more appropriate message */
+	colorsSelect[0].innerHTML = 'Please select a color'
+	colorsSelect[0].style.display = 'block';
+	colorsSelect[0].selected = 'true';
 } );
+/** Makes it so user cant select invalid option */
+colorsSelect.addEventListener('focus', e => {
+	colorsSelect[0].style.display = 'none';
+});
 /** Listener to update the total cost of the activities */
 activityFieldset.addEventListener( 'change', e => {
 	const activity = e.target;
@@ -347,20 +356,26 @@ checkboxes.forEach( checkbox => {
     /** Listener for disabling checkboxes with same timeframe
      *  to prevent user from choosing conflicting activities */
 	checkbox.addEventListener( 'change', e => {
-		if ( checkbox.checked ) {
-			checkboxes.forEach( cb => {
-				if ( cb.name !== checkbox.name && cb.dataset.dayAndTime === checkbox.dataset
-					.dayAndTime ) {
-					cb.parentElement.classList.add( 'disabled' );
-				}
-			} );
+		if( e.target.className !== 'disabled' ) {
+			if ( checkbox.checked ) {
+				checkboxes.forEach( cb => {
+					if ( cb.name !== checkbox.name && cb.dataset.dayAndTime === checkbox.dataset
+						.dayAndTime ) {
+						cb.parentElement.classList.add( 'disabled' );
+						cb.classList.add( 'disabled' );
+					}
+				} );
+			} else {
+				checkboxes.forEach( cb => {
+					if ( cb.name !== checkbox.name && cb.dataset.dayAndTime === checkbox.dataset
+						.dayAndTime ) {
+						cb.parentElement.classList.remove( 'disabled' );
+						cb.classList.remove( 'disabled' );
+					}
+				} );
+			}
 		} else {
-			checkboxes.forEach( cb => {
-				if ( cb.name !== checkbox.name && cb.dataset.dayAndTime === checkbox.dataset
-					.dayAndTime ) {
-					cb.parentElement.classList.remove( 'disabled' );
-				}
-			} );
+			e.target.checked = false;
 		}
 	} );
 } );
