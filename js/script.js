@@ -262,7 +262,7 @@ activityFieldset.addEventListener( 'change', e => {
 	const activity = e.target;
 	if ( activity.checked ) {
 		totalCost += +activity.dataset.cost;
-	} else if ( totalCost > 0 ) {
+	} else if ( totalCost > 0 && activity.className !== 'disabled' ) {
 		totalCost -= +activity.dataset.cost;
 	}
 	totalCostDisplay.innerHTML = `Total: $${totalCost}`;
